@@ -160,7 +160,7 @@ void loadGrid() {
 	const std::string key = "GRID";
 	const std::string value = GetPrivateProfileString(section, key, "", file);
 
-	if (value == "") {
+	if (value.empty()) {
 		return;
 	}
 
@@ -192,7 +192,7 @@ void loadScreen() {
 	const std::string key = GetCharInfo()->Name;
 	const std::string value = GetPrivateProfileString(section, key, "", file);
 
-	if (value == "") {
+	if (value.empty()) {
 		return;
 	}
 
