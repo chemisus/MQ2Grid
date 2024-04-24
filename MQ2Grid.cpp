@@ -11,15 +11,6 @@ PreSetup("MQ2Grid");
 PLUGIN_VERSION(0.1);
 
 
-static inline PSPAWNINFO SpawnMe() {
-	return pControlledPlayer;
-}
-
-static inline int InGame() {
-	return (gbInZone && gGameState == GAMESTATE_INGAME && SpawnMe() && GetPcProfile() && GetCharInfo() && GetCharInfo()->Stunned != 3);
-}
-
-
 namespace utils {
 	int GetSkillLevel(const int skill) {
 		return GetPcProfile()->Skill[skill];
@@ -251,11 +242,13 @@ PLUGIN_API void InitializePlugin()
 {
 	addCommands();
 
-	if (InGame()) {
-		loadGrid();
-		loadScreen();
-		apply();
+	if (!pLocalPC) {
+		return;
 	}
+
+	loadGrid();
+	loadScreen();
+	apply();
 }
 
 PLUGIN_API void ShutdownPlugin()
@@ -265,18 +258,24 @@ PLUGIN_API void ShutdownPlugin()
 
 PLUGIN_API void OnPulse()
 {
-	if (pulse.ready()) {
-		if (InGame()) {
-			apply();
-		}
+	if (!pLocalPC) {
+		return;
 	}
+
+	if (pulse.ready()) {
+		return;
+	}
+
+	apply();
 }
 
 PLUGIN_API void OnZoned()
 {
-	if (InGame()) {
-		loadGrid();
-		loadScreen();
-		apply();
+	if (!pLocalPC) {
+		return;
 	}
+
+	loadGrid();
+	loadScreen();
+	apply();
 }
