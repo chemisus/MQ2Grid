@@ -81,33 +81,6 @@ struct Grid {
 	int height = 87;
 
 	Box focus;
-
-	void apply(const Box& box) const {
-		const HWND window = GetEQWindowHandle();
-		WINDOWPLACEMENT placement{};
-		GetWindowPlacement(window, &placement);
-
-		const int top = box.row * height;
-		const int left = box.col * width;
-
-		const int right = left + box.width * width;
-		const int bottom = top + box.height * height;
-
-		if (placement.rcNormalPosition.left == left
-			&& placement.rcNormalPosition.right == right
-			&& placement.rcNormalPosition.top == top
-			&& placement.rcNormalPosition.bottom == bottom) {
-			return;
-		}
-
-		placement.rcNormalPosition.left = left;
-		placement.rcNormalPosition.right = right;
-
-		placement.rcNormalPosition.top = top;
-		placement.rcNormalPosition.bottom = bottom;
-
-		SetWindowPlacement(window, &placement);
-	}
 };
 
 Grid grid;
