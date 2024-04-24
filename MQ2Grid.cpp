@@ -43,30 +43,6 @@ namespace utils {
 		return atoi(arg);
 	}
 
-	static char* sprintf(const char* szFormat, ...) {
-		va_list vaList;
-		va_start(vaList, szFormat);
-
-		const int len = _vscprintf(szFormat, vaList) + 1 + 32;
-		const auto out = std::make_unique<char[]>(len);
-		char* szOutput = out.get();
-
-		vsprintf_s(szOutput, len, szFormat, vaList);
-		return szOutput;
-	}
-
-	static std::string sprintf(const std::string szFormat, ...) {
-		va_list vaList;
-		va_start(vaList, szFormat.c_str());
-
-		const int len = _vscprintf(szFormat.c_str(), vaList) + 1 + 32;
-		const auto out = std::make_unique<char[]>(len);
-		char* szOutput = out.get();
-
-		vsprintf_s(szOutput, len, szFormat.c_str(), vaList);
-		return std::string{ szOutput };
-	}
-
 	static inline void EzCommandf(const char* szFormat, ...) {
 		va_list vaList;
 		va_start(vaList, szFormat);
@@ -171,7 +147,7 @@ void saveGrid() {
 	const std::string section = GetServerShortName();
 
 	const std::string key = "GRID";
-	const std::string value = utils::sprintf("GRID %i %i %i %i %i %i", grid.width, grid.height, grid.focus.width, grid.focus.height, grid.focus.row, grid.focus.col);
+	const std::string value = fmt::format("GRID %i %i %i %i %i %i", grid.width, grid.height, grid.focus.width, grid.focus.height, grid.focus.row, grid.focus.col);
 
 	WritePrivateProfileString(section, key, value, file);
 	WriteChatf("save grid %s", value.c_str());
@@ -203,7 +179,7 @@ void saveScreen() {
 	const std::string section = GetServerShortName();
 
 	const std::string key = GetCharInfo()->Name;
-	const std::string value = utils::sprintf("%s %i %i %i %i %i", GetCharInfo()->Name, screen.box.width, screen.box.height, screen.box.row, screen.box.col, screen.focus);
+	const std::string value = fmt::format("%s %i %i %i %i %i", GetCharInfo()->Name, screen.box.width, screen.box.height, screen.box.row, screen.box.col, screen.focus);
 
 	WritePrivateProfileString(section, key, value, file);
 	WriteChatf("save box %s", value.c_str());
